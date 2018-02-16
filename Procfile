@@ -1,1 +1,1 @@
-web: gunicorn replayanalyzer.wsgi --log-file -
+web: gunicorn ReplayAnalyzer.wsgi --log-file -

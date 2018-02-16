@@ -25,7 +25,7 @@ SECRET_KEY = '+==0)g12^^1m3q*si$&v7j453)9_+f9kt*-+n#6j0j+zd0bvy@'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.herokuapp.com', 'eulerschezahl.herokuapp.com']
 
 
 # Application definition

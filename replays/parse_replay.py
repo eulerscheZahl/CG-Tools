@@ -14,4 +14,4 @@ def load_replay(id):
     data = r.json()
     game = data['success']['frames'][0]['view']
     if 'Roche' in game: return code4life.parse(data['success'])
-    return 'game not supported: ' + game
+    raise Exception('game not supported: ' + game.split('\n')[1])

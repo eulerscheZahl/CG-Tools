@@ -11,10 +11,13 @@ def parse(data):
     for i in range(project_count):
         projects.append(init[i+5])
     samples = []
-    game_input = [{'player': players[0], 'game':[]}, {'player': players[1], 'game':[]}]
+    game_input = [{'player':players[0], 'game':[], 'init':[]}, {'player': players[1], 'game':[], 'init':[]}]
     game0 = game_input[0]['game']
     game1 = game_input[1]['game']
     user_output = {}
+    for p in projects:
+        game_input[0]['init'].append(p)
+        game_input[1]['init'].append(p)
     for frame in range(len(data)):
         if 'stdout' in data[frame]:
             user_output[frame] = data[frame]['stdout']
@@ -25,9 +28,6 @@ def parse(data):
             game1.append({'round':frame, 'input':[]})
             input0 = game0[-1]['input']
             input1 = game1[-1]['input']
-            for p in projects:
-                input0.append(p)
-                input1.append(p)
             offset = 1 if frame > 0 else 6 + project_count
             for player in range(2):
                 line = input[player + offset].split()

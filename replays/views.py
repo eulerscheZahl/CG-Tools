@@ -10,6 +10,7 @@ def detail(request, replay_id):
     try:
         data = parse_replay.load_replay(replay_id)
         html = '<h1>' + data['game'] + '</h1>\n'
+        html += '<iframe src="https://www.codingame.com/replay/' + str(replay_id) + '" height="700" width="700"></iframe></br>\n'
         input_data = data['input']
         html += '<table>\n<tr>\n'
         for player in input_data:

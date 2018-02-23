@@ -4,6 +4,17 @@
 </head>
 <body>
     {% block content %}
+    <script>
+    function copyDivToClipboard(divInit, divRound) {
+        var input = document.getElementById(divInit).innerHTML;
+        input += document.getElementById(divRound).innerHTML;
+        document.getElementById('currentTurn').innerHTML = input
+        var range = window.getSelection().getRangeAt(0);
+        range.selectNode(document.getElementById('currentTurn'));
+        window.getSelection().addRange(range);
+        document.execCommand("copy");
+    }
+    </script>
 
     <form action="" method="post">
         {% csrf_token %}
@@ -15,6 +26,7 @@
     {% if replay_id != None %}
         <h1>{{ data|get_item:'game' }}</h1>
         <iframe src="https://www.codingame.com/replay/{{replay_id}}" height="700" width="700"></iframe></br>
+        <div id="currentTurn"></div>
         <table>
             <tr>
                 {% for player in data|get_item:'input' %}
@@ -25,15 +37,19 @@
             {% for player in data|get_item:'input' %}
             <td>
                 <h3>init</h3>
+                <div id="{{ player|get_item:'player' }}_init">
                 {% for init in player|get_item:'init' %}
                     {{init}} </br>
                 {% endfor %}
+                </div>
                 <div style="overflow-y: scroll; height:400px;">
                     {% for round in player|get_item:'game' %}
                         <h3>round {{ round|get_item:'round'|add:1 }} </h3>
+                        <div id="{{player|get_item:'player'}}_{{round|get_item:'round'}}" onclick="copyDivToClipboard('{{ player|get_item:'player' }}_init', '{{player|get_item:'player'}}_{{round|get_item:'round'}}')">
                         {% for line in round|get_item:'input' %}
                             {{line}} </br>
                         {% endfor %}
+                        </div>
                     {% endfor %}
                 </div>
             </td>

@@ -42,7 +42,6 @@ def parse(data):
             input1.append(input0[-2])
             input0.append(input[offset+2]) # shared molecules
             input1.append(input[offset+2])
-            if frame == 0: print(input)
             actions = 0 if input[offset+3].strip() == '' else int(input[offset+3])
             for a in range(actions):
                 action = input[offset+4+a].split()

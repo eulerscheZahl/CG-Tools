@@ -1,35 +1,26 @@
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import redirect, render
+from django.template.defaulttags import register
 
 from . import parse_replay
 
+@register.filter
+def get_item(dictionary, key):
+    return dictionary.get(key)
+
 def index(request):
-    return HttpResponse("start")
+    if 'id' in request.POST:
+        return redirect('detail', replay_id=request.POST['id'])
+    return render(request, 'base.html', {'replay_id':None})
+
+def post(request):
+    print(request)
 
 def detail(request, replay_id):
+    if 'id' in request.POST:
+        return redirect('detail', replay_id=request.POST['id'])
     try:
         data = parse_replay.load_replay(replay_id)
-        html = '<h1>' + data['game'] + '</h1>\n'
-        html += '<iframe src="https://www.codingame.com/replay/' + str(replay_id) + '" height="700" width="700"></iframe></br>\n'
-        input_data = data['input']
-        html += '<table>\n<tr>\n'
-        for player in input_data:
-            html += '<th>' + player['player'] + '</th>\n'
-        html += '</tr>\n'
-        for player in input_data:
-            html += '<td>\n'
-            html += '<h3>init</h3>\n'
-            print(player['init'])
-            for init in player['init']:
-                html += init + '</br>\n'
-            html += '<div style="overflow-y: scroll; height:400px;">'
-            for round in player['game']:
-                html += '<h3>round ' + str(round['round']) + '</h3>\n'
-                for line in round['input']:
-                    html += line + '</br>\n'
-            html += '</div></td>\n'
-        html += '</table>'
-
-        return HttpResponse(html)
-    except Exception as inst:
-        return HttpResponse(inst.args[0])
+    except Exception as ex:
+        return HttpResponse(ex.args[0])
+    return render(request, 'base.html', {'replay_id':replay_id, 'data':data})

@@ -17,5 +17,4 @@ def load_replay(id):
     game = data['success']['frames'][0]['view']
     if 'Roche' in game: return code4life.parse(data['success'])
     if 'TheGreatEscape' in game: return the_great_escape.parse(data['success'])
-    print(game)
     raise Exception('game not supported: ' + game.split('\n')[1])

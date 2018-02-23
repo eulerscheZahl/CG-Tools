@@ -1,0 +1,46 @@
+<html>
+<head>
+    <title>CG Replay Input</title>
+</head>
+<body>
+    {% block content %}
+
+    <form action="" method="post">
+        {% csrf_token %}
+        <label for="id">Replay ID: </label>
+        <input id="id" type="text" name="id">
+        <input type="submit" value="go">
+    </form>
+
+    {% if replay_id != None %}
+        <h1>{{ data|get_item:'game' }}</h1>
+        <iframe src="https://www.codingame.com/replay/{{replay_id}}" height="700" width="700"></iframe></br>
+        <table>
+            <tr>
+                {% for player in data|get_item:'input' %}
+                <th>{{ player|get_item:'player' }}</th>
+                {% endfor %}
+            </tr>
+
+            {% for player in data|get_item:'input' %}
+            <td>
+                <h3>init</h3>
+                {% for init in player|get_item:'init' %}
+                    {{init}} </br>
+                {% endfor %}
+                <div style="overflow-y: scroll; height:400px;">
+                    {% for round in player|get_item:'game' %}
+                        <h3>round {{ round|get_item:'round'|add:1 }} </h3>
+                        {% for line in round|get_item:'input' %}
+                            {{line}} </br>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+            </td>
+            {% endfor %}
+        </table>
+    {% endif %}
+
+    {% endblock %}
+</body>
+</html>

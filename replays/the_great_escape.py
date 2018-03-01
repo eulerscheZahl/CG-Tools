@@ -29,4 +29,4 @@ def parse(data):
             round.append(w)
         game_input[agent_id]['game'].append({'round':frame, 'input':round})
 
-    return {'game': 'the great escape', 'input':game_input, 'output':None}
+    return {'game': 'the great escape', 'input':game_input, 'output':user_output}

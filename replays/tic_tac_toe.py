@@ -10,7 +10,7 @@ def parse(data):
 
     user_output = {}
     board = Board()
-    for frame in range(len(data) - 1):
+    for frame in range(len(data)):
         if 'stdout' in data[frame]:
             user_output[frame] = data[frame]['stdout']
             parts = data[frame]['stdout'].split()

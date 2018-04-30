@@ -23,4 +23,4 @@ def load_replay(id):
     s = json.dumps(data)
     if 'circle.png' in s and 'cross.png' in s:
         return tic_tac_toe.parse(data['success'])
-    raise Exception('game not supported: ' + game.split('\n')[1])
+    raise Exception('game not supported: ' + game.split('\n')[1] + '</br></br></br>' + s)

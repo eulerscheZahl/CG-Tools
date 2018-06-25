@@ -60,6 +60,13 @@
             </td>
             {% endfor %}
         </table>
+<!--
+        <h3>output</h3> </br>
+        {{ data|get_item:'output' }}
+        {% for key in data|get_item:'output' %}
+        Round {{ key }}: {{ key.attribute }} </br>
+        {% endfor %}
+-->
     {% endif %}
 
     {% endblock %}

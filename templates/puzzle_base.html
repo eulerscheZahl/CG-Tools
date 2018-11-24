@@ -1,0 +1,60 @@
+<html>
+<head>
+    <title>CG Puzzle search</title>
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+</head>
+<body>
+    {% block content %}
+
+    <form action="" method="post">
+        {% csrf_token %}
+        <label for="search">Search text: </label>
+        <input id="search" type="text" name="search">
+        <input type="submit" value="go">
+    </form>
+
+    {% if search != None %}
+
+    <script>
+    $( function() {
+    $.fn.myAccordion = function(){
+  return this.each(function(){
+    $(this).addClass("ui-accordion ui-accordion-icons ui-widget ui-helper-reset")
+  .find("h3")
+    .addClass("ui-accordion-header ui-helper-reset ui-state-default ui-corner-top ui-corner-bottom")
+    .hover(function() { $(this).toggleClass("ui-state-hover"); })
+    .prepend('<span class="ui-icon ui-icon-triangle-1-e"></span>')
+    .click(function() {
+      $(this)
+        .toggleClass("ui-accordion-header-active ui-state-active ui-state-default ui-corner-bottom")
+        .find("> .ui-icon").toggleClass("ui-icon-triangle-1-e ui-icon-triangle-1-s").end()
+        .next().slideToggle();
+      return false;
+    })
+    .next()
+      .addClass("ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom")
+      .hide();
+  });
+};
+
+$("#notaccordion").myAccordion();
+    } );
+    </script>
+
+<div id="notaccordion">
+    {% for puzzle in data %}
+    <h3> {{ puzzle|get_item:'title' }} </h3>
+    <div>
+        <a href={{ puzzle|get_item:'url' }}>view contribution on CodinGame</a> <br>
+        {{ puzzle|get_item:'statement'|safe }}
+    </div>
+    {% endfor %}
+</div>
+    {% endif %}
+
+    {% endblock %}
+</body>
+</html>

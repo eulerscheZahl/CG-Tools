@@ -1,3 +1,5 @@
 venv
 *.pyc
 .env
+
+update_puzzles.py

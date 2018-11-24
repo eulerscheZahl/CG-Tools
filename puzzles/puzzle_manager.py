@@ -6,16 +6,21 @@ from .models import Puzzle
 def search(search_text):
     result = []
     for puzzle in Puzzle.objects.all():
-        hit = False
+        data = json.loads(puzzle.puzzle)['success']
+        hit = True
         for s in search_text.split():
-            if s in puzzle.puzzle.lower(): hit = True
+            subHit = False
+            for category in ['inputDescription', 'outputDescription', 'constraints', 'statement', 'title']:
+                if category in data['lastVersion']['data'] and s in data['lastVersion']['data'][category].lower(): subHit = True
+            if not subHit: hit = False
         if hit:
-            data = json.loads(puzzle.puzzle)['success']
             data['lastVersion']['statementHTML'] += '</div>'
             result.append({
-                'title':data['title'],
+                'title': data['title'],
                 'url': 'https://www.codingame.com/contribute/view/' + puzzle.handle,
-                'statement':data['lastVersion']['statementHTML']
+                'statement': data['lastVersion']['statementHTML'],
+                'type': data['type'],
+                'author': data['nickname'] if 'nickname' in data else 'unknown',
             })
     return result
 

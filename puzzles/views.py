@@ -19,6 +19,8 @@ def post(request):
 
 def detail(request, search):
     if 'search' in request.POST:
+        if request.POST['search'] == '':
+            return render(request, 'puzzle_base.html', {'search':None})
         return redirect('detail', search=request.POST['search'])
     try:
         data = puzzle_manager.search(search)

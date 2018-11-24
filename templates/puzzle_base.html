@@ -46,7 +46,7 @@ $("#notaccordion").myAccordion();
 
 <div id="notaccordion">
     {% for puzzle in data %}
-    <h3> {{ puzzle|get_item:'title' }} </h3>
+    <h3><a href="#">{{ puzzle|get_item:'title' }}</a></h3>
     <div>
         <a href={{ puzzle|get_item:'url' }}>view contribution on CodinGame</a> <br>
         {{ puzzle|get_item:'statement'|safe }}

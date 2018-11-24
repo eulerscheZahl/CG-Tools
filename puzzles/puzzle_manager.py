@@ -12,7 +12,6 @@ def search(search_text):
         if hit:
             data = json.loads(puzzle.puzzle)['success']
             data['lastVersion']['statementHTML'] += '</div>'
-            print(data['title'])
             result.append({
                 'title':data['title'],
                 'url': 'https://www.codingame.com/contribute/view/' + puzzle.handle,

@@ -2,7 +2,8 @@
 <head>
     <title>CG Puzzle search</title>
     <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css">
-    <link rel="stylesheet" href="style.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 </head>
@@ -47,7 +48,7 @@ $("#notaccordion").myAccordion();
 <div id="notaccordion">
     {% for puzzle in data %}
     <h3><a href="#">{{ puzzle|get_item:'title' }}</a></h3>
-    <div>
+    <div class="cg-statement">
         <a href={{ puzzle|get_item:'url' }}>view contribution on CodinGame</a> <br>
         {{ puzzle|get_item:'statement'|safe }}
     </div>

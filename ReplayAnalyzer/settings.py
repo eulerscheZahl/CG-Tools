@@ -25,7 +25,7 @@ SECRET_KEY = '+==0)g12^^1m3q*si$&v7j453)9_+f9kt*-+n#6j0j+zd0bvy@'
 # SECURITY WARNING: don't run with debug turned on in production!
 
 #####################
-DEBUG = False ########
+DEBUG = True ########
 #####################
 
 ALLOWED_HOSTS = ['127.0.0.1', '.herokuapp.com', 'eulerschezahl.herokuapp.com']
@@ -124,3 +124,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = '/'
+
+import os
+SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
+STATICFILES_DIRS = (
+  os.path.join(SITE_ROOT, 'static/'),
+)

@@ -14,6 +14,10 @@ def search(search_text):
                 if category in data['lastVersion']['data'] and s in data['lastVersion']['data'][category].lower(): subHit = True
             for test in data['lastVersion']['data']['testCases']:
                 if s in str(test['title']).lower(): subHit = True
+            if 'topics' in data['lastVersion']['data']: # check for matches in the tags
+                for tag in data['lastVersion']['data']['topics']:
+                    for language in tag['labelMap'].values():
+                        if s in str(language).lower(): subHit = True
             if puzzle.comments != '':
                 for comment in json.loads(puzzle.comments):
                     if s in comment['content'].lower(): subHit = True

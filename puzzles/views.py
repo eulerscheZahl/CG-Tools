@@ -21,7 +21,8 @@ def detail(request, search):
     if 'search' in request.POST:
         if request.POST['search'] == '':
             return render(request, 'puzzle_base.html', {'search':None})
-        return redirect('detail', search=request.POST['search'])
+        return redirect('detail', search=request.POST['search'].replace(' ', '-'))
+    search = search.replace('-',' ')
     try:
         data = puzzle_manager.search(search)
     except Exception as ex:

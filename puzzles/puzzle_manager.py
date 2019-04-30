@@ -57,3 +57,4 @@ def update(handle):
                 commentsUnique.append(c)
         puzzle.comments = json.dumps(commentsUnique)
         puzzle.save()
+        

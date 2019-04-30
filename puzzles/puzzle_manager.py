@@ -7,13 +7,15 @@ def search(search_text):
     result = []
     for puzzle in Puzzle.objects.all():
         data = json.loads(puzzle.puzzle)['success']
+        if not 'statementHTML' in data['lastVersion']: continue # ignore multiplayer/viewer games
         hit = True
         for s in search_text.lower().split():
             subHit = False
             for category in ['inputDescription', 'outputDescription', 'constraints', 'statement', 'title']:
                 if category in data['lastVersion']['data'] and s in data['lastVersion']['data'][category].lower(): subHit = True
-            for test in data['lastVersion']['data']['testCases']:
-                if s in str(test['title']).lower(): subHit = True
+            if 'testCases' in data['lastVersion']['data']:
+                for test in data['lastVersion']['data']['testCases']:
+                    if s in str(test['title']).lower(): subHit = True
             if 'topics' in data['lastVersion']['data']: # check for matches in the tags
                 for tag in data['lastVersion']['data']['topics']:
                     for language in tag['labelMap'].values():

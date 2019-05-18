@@ -27,7 +27,6 @@ def detail(request, search):
         data = puzzle_manager.search(search)
     except Exception as ex:
         return HttpResponse(ex.args[0])
-    print(data)
     return render(request, 'puzzle_base.html', {'search':search, 'data':data})
 
 @csrf_exempt

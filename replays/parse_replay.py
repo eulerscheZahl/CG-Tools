@@ -38,5 +38,5 @@ def reproduce_replay(id):
         agent = frame['agentId']
         stdout = frame['stdout'].replace('\\n', '')
         if agent not in actions: actions[agent] = []
-        actions[agent].append(stdout)
+        if stdout != '': actions[agent].append(stdout)
     return { 'game':game, 'actions':actions }

@@ -1,6 +1,7 @@
 certifi==2018.1.18
 chardet==3.0.4
 Django==2.0.2
+djangorestframework==3.9.4
 gunicorn==19.7.1
 idna==2.6
 pytz==2018.3

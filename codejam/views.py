@@ -2,10 +2,42 @@ from django.db import transaction
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.template.defaulttags import register
+from rest_framework import viewsets, generics
 from os import listdir
 import json
 
 from .models import Round, Country, User, RoundResult
+from .serializers import RoundSerializer, CountrySerializer, UserSerializer, RoundResultSerializer
+
+
+class ResultList(generics.ListAPIView):
+    serializer_class = RoundResultSerializer
+
+    def get_queryset(self):
+        name = self.kwargs.get('name', None)
+        queryset = RoundResult.objects.filter(user__name=name).order_by('round__order')
+        return queryset
+
+
+class RoundViewSet(viewsets.ModelViewSet):
+    queryset = Round.objects.all()
+    serializer_class = RoundSerializer
+
+
+class CountryViewSet(viewsets.ModelViewSet):
+    queryset = Country.objects.all()
+    serializer_class = CountrySerializer
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+
+class RoundResultViewSet(viewsets.ModelViewSet):
+    queryset = RoundResult.objects.all()
+    serializer_class = RoundResultSerializer
+
 
 @register.filter
 def format_time(time):

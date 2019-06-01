@@ -7,4 +7,5 @@ urlpatterns = [
     #path('admin/', admin.site.urls),
     path('codingame/replays/', include('replays.urls')),
     path('codingame/puzzles/', include('puzzles.urls')),
+    path('codejam/', include('codejam.urls')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

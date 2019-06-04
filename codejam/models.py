@@ -7,6 +7,7 @@ class Round(models.Model):
     @classmethod
     def create(cls, name):
         round = cls(name=name)
+        round.order = -1 # set by hand
         round.save()
         return round
 

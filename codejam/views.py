@@ -102,7 +102,7 @@ def update(request):
 def update2(request):
     dir = '/home/eulerschezahl/Dokumente/Programmieren/challenges/codejam/google_codejam_stats/client/public/round_data/'
     for round in ['00000000000000cb.json', '0000000000000130.json', '0000000000007706.json', '0000000000007707.json',
-                  '0000000000007764.json', '0000000000007765.json', '0000000000007766.json',
+                  '0000000000007764.json', '0000000000007765.json', '0000000000007766.json', '0000000000051679.json',
                   '0000000000007883.json', '0000000000051635.json', '00000000000516b9.json',
                   '0000000000051705.json', '0000000000051706.json']:
         info = dir + 'info/' + round
@@ -120,7 +120,7 @@ def update2(request):
             time = -result['score2'] // 1000000
             country_name = result['country']
             rank = result['rank']
-            print(name, points, time, country_name, rank)
+            if rank % 100 == 0: print(name, points, time, country_name, rank)
 
             country = Country.objects.filter(name=country_name).first()
             if country == None: country = Country.create(country_name)

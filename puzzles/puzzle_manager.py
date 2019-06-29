@@ -7,15 +7,16 @@ def search(search_text):
     result = []
     for puzzle in Puzzle.objects.all():
         data = json.loads(puzzle.puzzle)['success']
-        if not 'statementHTML' in data['lastVersion']: continue # ignore multiplayer/viewer games
         hit = True
         for s in search_text.lower().split():
             subHit = False
             for category in ['inputDescription', 'outputDescription', 'constraints', 'statement', 'title']:
-                if category in data['lastVersion']['data'] and s in data['lastVersion']['data'][category].lower(): subHit = True
+                if category in data['lastVersion']['data'] and s in data['lastVersion']['data'][category].lower():
+                    subHit = True
+                    print(s + ': ' + data['lastVersion']['data']['title'])
             if 'testCases' in data['lastVersion']['data']:
                 for test in data['lastVersion']['data']['testCases']:
-                    if s in str(test['title']).lower(): subHit = True
+                    if s in str(test['title']).lower() or s in str(test['testIn']).lower() or s in str(test['testOut']).lower(): subHit = True
             if 'topics' in data['lastVersion']['data']: # check for matches in the tags
                 for tag in data['lastVersion']['data']['topics']:
                     for language in tag['labelMap'].values():
@@ -25,11 +26,18 @@ def search(search_text):
                     if s in comment['content'].lower(): subHit = True
             if not subHit: hit = False
         if hit:
-            data['lastVersion']['statementHTML'] += '</div>'
+            if 'statementHTML' in data['lastVersion']: # classic puzzle
+                statement = data['lastVersion']['statementHTML'] + '</div>'
+            else: # interactive
+                statement = data['lastVersion']['data']['levelParams']
+                print(list(statement.keys()))
+                key = sorted(list(statement.keys()))[-1]
+                print(key)
+                statement = statement[key]['statements']['2']
             result.append({
                 'title': data['title'],
                 'url': 'https://www.codingame.com/contribute/view/' + puzzle.handle,
-                'statement': data['lastVersion']['statementHTML'],
+                'statement': statement,
                 'type': data['type'],
                 'author': data['nickname'] if 'nickname' in data else 'unknown',
             })
@@ -59,4 +67,3 @@ def update(handle):
                 commentsUnique.append(c)
         puzzle.comments = json.dumps(commentsUnique)
         puzzle.save()
-        

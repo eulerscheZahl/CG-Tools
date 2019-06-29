@@ -11,7 +11,7 @@ def get_item(dictionary, key):
 
 def index(request):
     if 'search' in request.POST:
-        return redirect('detail', search=request.POST['search'])
+        return redirect('puzzle_detail', search=request.POST['search'])
     return render(request, 'puzzle_base.html', {'search':None})
 
 def post(request):
@@ -21,7 +21,7 @@ def detail(request, search):
     if 'search' in request.POST:
         if request.POST['search'] == '':
             return render(request, 'puzzle_base.html', {'search':None})
-        return redirect('detail', search=request.POST['search'].replace(' ', '-'))
+        return redirect('puzzle_detail', search=request.POST['search'].replace(' ', '-'))
     search = search.replace('-',' ')
     try:
         data = puzzle_manager.search(search)

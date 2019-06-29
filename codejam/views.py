@@ -56,14 +56,14 @@ def autocomplete(request):
 
 def index(request):
     if 'search' in request.POST:
-        return redirect('detail', search=request.POST['search'])
+        return redirect('codejam_detail', search=request.POST['search'])
     return render(request, 'codejam_base.html', {'search':None})
 
 def detail(request, search):
     if 'search' in request.POST:
         if request.POST['search'] == '':
             return render(request, 'codejam_base.html', {'search':None})
-        return redirect('detail', search=request.POST['search'])
+        return redirect('codejam_detail', search=request.POST['search'])
 
     user = User.objects.filter(name=search).first()
     if user == None: return render(request, 'codejam_base.html', {'search':None})

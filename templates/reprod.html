@@ -1,10 +1,12 @@
 <html>
+
 <head>
     <title>CG Replay Reproduce</title>
     <style>
         h3 {display: inline;}
     </style>
 </head>
+
 <body>
     {% block content %}
 
@@ -16,16 +18,17 @@
     </form>
 
     {% if replay_id != None %}
-        <iframe src="https://www.codingame.com/replay/{{replay_id}}" height="700" width="700"></iframe></br>
-        {% for player,acts in actions %}
-            def player{{player}}(): </br>
-            {% for a in acts %}
-                &nbsp;&nbsp;&nbsp;&nbsp;print('{{a}}') </br>
-            {% endfor %}
-            </br>
-        {% endfor %}
+    <iframe src="https://www.codingame.com/replay/{{replay_id}}" height="700" width="700"></iframe></br>
+<pre>
+{% for player,acts in actions %}
+def player{{player}}():{% for a in acts %}
+    print('{{ a|split_line }}'){% endfor %}
+
+{% endfor %}
+</pre>
     {% endif %}
 
     {% endblock %}
 </body>
+
 </html>

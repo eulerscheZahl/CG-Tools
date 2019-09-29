@@ -25,6 +25,8 @@ def detail(request, search):
     search = search.replace('-',' ')
     try:
         data = puzzle_manager.search(search)
+        if len(data) > 1:
+            data.sort(key=lambda x: -x['score'])
     except Exception as ex:
         return HttpResponse(ex.args[0])
     return render(request, 'puzzle_base.html', {'search':search, 'data':data})

@@ -8,6 +8,10 @@ from . import parse_replay
 def get_item(dictionary, key):
     return dictionary.get(key)
 
+@register.filter
+def split_line(value):
+    return value.strip().replace('\n', '\\n')
+
 def index(request):
     if 'id' in request.POST:
         return redirect('detail', replay_id=request.POST['id'])

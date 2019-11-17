@@ -38,6 +38,8 @@ def search(search_text):
         if hit:
             if 'statementHTML' in data['lastVersion']: # classic puzzle
                 statement = data['lastVersion']['statementHTML'] + '</div>'
+            elif 'statement' in data['lastVersion']['data']: # classic puzzle
+                statement = data['lastVersion']['data']['statement'] + '</div>'
             else: # interactive
                 statement = data['lastVersion']['data']['levelParams']
                 key = sorted(list(statement.keys()))[-1]

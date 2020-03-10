@@ -57,7 +57,7 @@ def search(search_text):
 def update(handle):
     puzzle = Puzzle.objects.filter(handle=handle).first()
     if puzzle == None:
-        url = 'https://www.codingame.com/services/ContributionRemoteService/getContribution'
+        url = 'https://www.codingame.com/services/ContributionRemoteService/findContribution'
         r = requests.post(url, json=[handle,True])
         puzzle = Puzzle(handle=handle, puzzle=json.dumps(r.json()))
         puzzle.save()

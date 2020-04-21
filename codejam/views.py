@@ -72,7 +72,7 @@ def detail(request, search):
 
 @transaction.atomic
 def update(request):
-    dir = '/home/eulerschezahl/Dokumente/Programmieren/challenges/codejam/2017/'
+    dir = '/home/eulerschezahl/Documents/Programming/challenges/codejam/2017/'
     year = dir.split('/')[-2]
     for file in listdir(dir):
         with open(dir + file, 'r') as f:
@@ -100,8 +100,8 @@ def update(request):
 
 @transaction.atomic
 def update2(request):
-    dir = '/home/eulerschezahl/Dokumente/Programmieren/challenges/codejam/google_codejam_stats/client/public/round_data/'
-    for round in ['0000000000051707.json', '0000000000051708.json']:
+    dir = '/home/eulerschezahl/Documents/Programming/challenges/codejam/google_codejam_stats/client/public/round_data/'
+    for round in ['000000000019fd74.json', '000000000019fef2.json']:
         info = dir + 'info/' + round
         scores = dir + 'scores/' + round
         with open(info, 'r') as f:

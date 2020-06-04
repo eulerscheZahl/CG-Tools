@@ -7,6 +7,7 @@
 </head>
 <body>
     {% block content %}
+    {% include "header.html" %}
     <script>
     function copyDivToClipboard(divInit, divRound) {
         var input = document.getElementById(divInit).innerHTML;

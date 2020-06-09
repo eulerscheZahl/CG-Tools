@@ -9,27 +9,20 @@ from . import puzzle_manager
 def get_item(dictionary, key):
     return dictionary.get(key)
 
+@register.filter
+def clean_html(html):
+    open = html.count('<div')
+    close = html.count('</div')
+    return '<div>' * max(0, close-open) + html + '</div>' * max(0, open-close)
+
 def index(request):
-    if 'search' in request.POST:
-        return redirect('puzzle_detail', search=request.POST['search'])
+    if 'q' in request.GET:
+        search = request.GET['q']
+        data = puzzle_manager.search(search)
+        if len(data) > 1:
+            data.sort(key=lambda x: -x['score'])
+        return render(request, 'puzzle_base.html', {'search':search, 'data':data})
     return render(request, 'puzzle_base.html', {'search':None})
-
-def post(request):
-    print(request)
-
-def detail(request, search):
-    if 'search' in request.POST:
-        if request.POST['search'] == '':
-            return render(request, 'puzzle_base.html', {'search':None})
-        return redirect('puzzle_detail', search=request.POST['search'].replace(' ', '-'))
-    search = search.replace('-',' ')
-#    try:
-    data = puzzle_manager.search(search)
-    if len(data) > 1:
-        data.sort(key=lambda x: -x['score'])
-#    except Exception as ex:
-#        return HttpResponse(ex.args[0])
-    return render(request, 'puzzle_base.html', {'search':search, 'data':data})
 
 @csrf_exempt
 def update(request):

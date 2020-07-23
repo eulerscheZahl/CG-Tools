@@ -25,7 +25,7 @@ def index(request):
     categories = sorted(list(categories))
     if 'q' in request.GET:
         search = request.GET['q']
-        cat = request.GET['category']
+        cat = request.GET.get('category', 'ANY')
         data = puzzle_manager.search(search, cat)
         if len(data) > 1:
             data.sort(key=lambda x: -x['score'])

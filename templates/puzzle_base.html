@@ -76,6 +76,11 @@
     <form method="GET">
         <label for="search">Search text: </label>
         <input id="q" type="text" name="q" value="{{ request.GET.q }}">
+        <select id="category" name="category">
+            {% for cat in categories %}
+                <option value="{{cat}}" {% if request.GET.category == cat %}selected{% endif %}>{{cat}}</option>
+            {% endfor %}
+        </select>
         <input type="submit" value="go">
     </form>
 

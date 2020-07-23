@@ -3,11 +3,11 @@ import requests
 
 from .models import Puzzle
 
-def search(search_text, category):
+def search(search_text, search_category):
     result = []
     for puzzle in Puzzle.objects.all():
         data = json.loads(puzzle.puzzle)['success']
-        if data['type'] != category and category != 'ANY': continue
+        if data['type'] != search_category and search_category != 'ANY': continue
         hit = True
         score = 0
         for s in search_text.lower().split():

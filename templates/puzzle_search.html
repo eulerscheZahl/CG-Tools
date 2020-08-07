@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block content %}
+<form method="GET">
+    <label for="search">Search text: </label>
+    <input id="q" type="text" name="q" value="{{ request.GET.q }}">
+    <input type="submit" value="go"> <br>
+    Options<br>
+    Category: <select id="category" name="category">
+        {% for cat in categories %}
+            <option value="{{cat}}" {% if request.GET.category == cat %}selected{% endif %}>{{cat}}</option>
+        {% endfor %}
+    </select> <br>
+    <input type="checkbox" id="title" name="title" {% if title %}checked{% endif %}>
+    <label for="title">Title</label> <br>
+    <input type="checkbox" id="statement" name="statement" {% if statement %}checked{% endif %}>
+    <label for="statement">Statement</label> <br>
+    <input type="checkbox" id="tests" name="tests" {% if tests %}checked{% endif %}>
+    <label for="tests">Textcases</label> <br>
+    <input type="checkbox" id="comments" name="comments" {% if comments %}checked{% endif %}>
+    <label for="comments">Comments</label> <br>
+    <input type="checkbox" id="tags" name="tags" {% if tags %}checked{% endif %}>
+    <label for="tags">Tags</label> <br>
+    <input type="checkbox" id="author" name="author" {% if author %}checked{% endif %}>
+    <label for="author">Author</label> <br>
+</form>
+
+{% if search != None %}
+
+    <script>
+        $( function() {
+        $.fn.myAccordion = function(){
+        return this.each(function(){
+        $(this).addClass("ui-accordion ui-accordion-icons ui-widget ui-helper-reset")
+        .find("h3")
+        .addClass("ui-accordion-header ui-helper-reset ui-state-default ui-corner-top ui-corner-bottom")
+        .hover(function() { $(this).toggleClass("ui-state-hover"); })
+        .prepend('<span class="ui-icon ui-icon-triangle-1-e"></span>')
+        .click(function() {
+          $(this)
+            .toggleClass("ui-accordion-header-active ui-state-active ui-state-default ui-corner-bottom")
+            .find("> .ui-icon").toggleClass("ui-icon-triangle-1-e ui-icon-triangle-1-s").end()
+            .next().slideToggle();
+          return false;
+        })
+        .next()
+          .addClass("ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom")
+          .hide();
+        });
+        };
+
+        $("#notaccordion").myAccordion();
+        } );
+    </script>
+
+    <b>{{ data|length }}</b> results found: <br>
+    <div id="notaccordion">
+    {% for puzzle in data %}
+        <h3><a href="#">{{ puzzle|get_item:'title' }}&nbsp;&nbsp;&nbsp;<sup><small>{{ puzzle|get_item:'type' }} by {{ puzzle|get_item:'author' }}</small></sup></a></h3>
+        <div class="cg-statement">
+            <a href={{ puzzle|get_item:'url' }}>view contribution on CodinGame</a> <br>
+            {{ puzzle|get_item:'statement'|clean_html|safe }}
+        </div>
+    {% endfor %}
+    </div>
+{% endif %}
+
+{% endblock %}

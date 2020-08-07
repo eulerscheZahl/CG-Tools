@@ -1,75 +1,84 @@
 <html>
 <head>
-    <title>CG Replay Input</title>
+    <title>CG Puzzle search</title>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css">
+    {% load static %}
+    <link rel="stylesheet" href="https://static.codingame.com/commons-vendors-af0fee19.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
     <style>
-        h3 {display: inline;}
+        body {
+            background-color: #454c55;
+            color: #f2bb13;
+            padding-top: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .header a {
+            color: white;
+            background-color: #fda047af;
+            text-decoration: none;
+            padding: 0.7rem;
+            margin-block-start: 0.5rem;
+            border-radius: 2rem;
+            text-transform: uppercase;
+            font-family: Open Sans, Lato, sans-serif !important;
+            font-weight: 800;
+            font-size: 0.94rem;
+            display: inline-block;
+        }
+
+        form {
+            margin-top: 2rem;
+            font-weight: bold;
+            box-shadow: -1px 2px 50px 1px #2f3338;
+            padding: 1rem;
+        }
+
+        form>input[type="submit"] {
+            outline: none;
+            border: none;
+            padding: 0.7rem;
+            margin-left: 0rem;
+            font-size: 1.2rem;
+            font-family: "consolas";
+            background-color: seagreen;
+            color: white;
+        }
+
+        form>input[type="text"] {
+            outline: none;
+            border: none;
+            padding: 0.7rem;
+            font-size: 1.2rem;
+            font-family: "consolas";
+            margin-right: 0rem;
+            background-color: #4c4c4c;
+            color: white;
+        }
+
+        #notaccordion>h3>a {
+            color: #3B3B3B;
+            line-height: 0.6em;
+            font-size: 1.3rem;
+            letter-spacing: 0em;
+            font-weight: 600;
+            font-style: normal;
+        }
     </style>
 </head>
 <body>
+    <a href="https://github.com/eulerscheZahl/CG-Tools" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#b50e25; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <div class="header">
+        <a href="{% url 'codejam_index' %}">Codejam user search</a>
+        <a href="{% url 'analyze' %}">CodinGame replay json</a>
+        <a href="{% url 'reprod' %}">CodinGame replay reproduce</a>
+        <a href="{% url 'puzzle_index' %}">CodinGame puzzle search</a>
+    </div>
+<!-- 467332804 -->
     {% block content %}
-    {% include "header.html" %}
-    <script>
-    function copyDivToClipboard(divInit, divRound) {
-        var input = document.getElementById(divInit).innerHTML;
-        input += document.getElementById(divRound).innerHTML;
-        document.getElementById('currentTurn').innerHTML = input
-        var range = window.getSelection().getRangeAt(0);
-        range.selectNode(document.getElementById('currentTurn'));
-        window.getSelection().addRange(range);
-        document.execCommand("copy");
-    }
-    </script>
-
-    <form action="" method="post">
-        {% csrf_token %}
-        <label for="id">Replay ID: </label>
-        <input id="id" type="text" name="id">
-        <input type="submit" value="go">
-    </form>
-
-    {% if replay_id != None %}
-        <h1>{{ data|get_item:'game' }}</h1>
-        <iframe src="https://www.codingame.com/replay/{{replay_id}}" height="700" width="700"></iframe></br>
-        <div id="currentTurn"></div>
-        <table>
-            <tr>
-                {% for player in data|get_item:'input' %}
-                <th>{{ player|get_item:'player' }}</th>
-                {% endfor %}
-            </tr>
-
-            {% for player in data|get_item:'input' %}
-            <td>
-                <h3>init</h3> </br>
-                <div id="{{ player|get_item:'player' }}_init">
-                {% for init in player|get_item:'init' %}
-                    {{init}} </br>
-                {% endfor %}
-                </div>
-                <div style="overflow-y: scroll; height:400px; width:300px;">
-                    {% for round in player|get_item:'game' %}
-                        <div>
-                            <h3>round {{ round|get_item:'round'|add:1 }} </h3> <button onclick="copyDivToClipboard('{{ player|get_item:'player' }}_init', '{{player|get_item:'player'}}_{{round|get_item:'round'}}')">copy</button>
-                        </div>
-                        <div id="{{player|get_item:'player'}}_{{round|get_item:'round'}}">
-                        {% for line in round|get_item:'input' %}
-                            {{line}} </br>
-                        {% endfor %}
-                        </div>
-                    {% endfor %}
-                </div>
-            </td>
-            {% endfor %}
-        </table>
-<!--
-        <h3>output</h3> </br>
-        {{ data|get_item:'output' }}
-        {% for key in data|get_item:'output' %}
-        Round {{ key }}: {{ key.attribute }} </br>
-        {% endfor %}
--->
-    {% endif %}
-
     {% endblock %}
 </body>
 </html>

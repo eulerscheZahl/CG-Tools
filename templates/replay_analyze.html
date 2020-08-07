@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<script>
+function copyDivToClipboard(divInit, divRound) {
+    var input = document.getElementById(divInit).innerHTML;
+    input += document.getElementById(divRound).innerHTML;
+    document.getElementById('currentTurn').innerHTML = input
+    var range = window.getSelection().getRangeAt(0);
+    range.selectNode(document.getElementById('currentTurn'));
+    window.getSelection().addRange(range);
+    document.execCommand("copy");
+}
+</script>
+
+<form action="" method="get">
+    <label for="id">Replay ID: </label>
+    <input id="id" type="text" name="id">
+    <input type="submit" value="go">
+</form>
+
+{% if replay_id != None %}
+    <h1>{{ data|get_item:'game' }}</h1>
+    <iframe src="https://www.codingame.com/replay/{{replay_id}}" height="700" width="700"></iframe></br>
+    <div id="currentTurn"></div>
+    <table>
+        <tr>
+            {% for player in data|get_item:'input' %}
+            <th>{{ player|get_item:'player' }}</th>
+            {% endfor %}
+        </tr>
+
+        {% for player in data|get_item:'input' %}
+        <td>
+            <h3>init</h3> </br>
+            <div id="{{ player|get_item:'player' }}_init">
+            {% for init in player|get_item:'init' %}
+                {{init}} </br>
+            {% endfor %}
+            </div>
+            <div style="overflow-y: scroll; height:400px; width:300px;">
+                {% for round in player|get_item:'game' %}
+                    <div>
+                        <h3>round {{ round|get_item:'round'|add:1 }} </h3> <button onclick="copyDivToClipboard('{{ player|get_item:'player' }}_init', '{{player|get_item:'player'}}_{{round|get_item:'round'}}')">copy</button>
+                    </div>
+                    <div id="{{player|get_item:'player'}}_{{round|get_item:'round'}}">
+                    {% for line in round|get_item:'input' %}
+                        {{line}} </br>
+                    {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
+        </td>
+        {% endfor %}
+    </table>
+<!--
+    <h3>output</h3> </br>
+    {{ data|get_item:'output' }}
+    {% for key in data|get_item:'output' %}
+    Round {{ key }}: {{ key.attribute }} </br>
+    {% endfor %}
+-->
+{% endif %}
+
+{% endblock %}

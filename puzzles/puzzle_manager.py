@@ -3,39 +3,39 @@ import requests
 
 from .models import Puzzle
 
-def search(search_text, search_category):
+def search(search_text, search_category, search_title, search_statement,
+           search_tests, search_comments, search_tags, search_author):
     result = []
     for puzzle in Puzzle.objects.all():
         data = json.loads(puzzle.puzzle)['success']
         if data['type'] != search_category and search_category != 'ANY': continue
+        author = data['nickname'] if 'nickname' in data else 'unknown'
         hit = True
         score = 0
         for s in search_text.lower().split():
-            subHit = False
+            sub_score = 0
             for category in ['inputDescription', 'outputDescription', 'constraints', 'statement', 'title']:
                 if category in data['lastVersion']['data'] and s in data['lastVersion']['data'][category].lower():
-                    subHit = True
-                    if category == 'title': score += 10
-                    if category == 'inputDescription': score += 3
-                    if category == 'outputDescription': score += 2
-                    if category == 'constraints': score += 2
-            if 'testCases' in data['lastVersion']['data']:
+                    if search_title and category == 'title': sub_score += 10
+                    if search_statement and category == 'inputDescription': sub_score += 3
+                    if search_statement and category == 'outputDescription': sub_score += 2
+                    if search_statement and category == 'constraints': sub_score += 2
+            if search_tests and 'testCases' in data['lastVersion']['data']:
                 for test in data['lastVersion']['data']['testCases']:
                     if s in str(test['title']).lower() or s in str(test['testIn']).lower() or s in str(test['testOut']).lower():
-                        subHit = True
-                        score += 1
-            if 'topics' in data['lastVersion']['data']: # check for matches in the tags
+                        sub_score += 1
+            if search_tags and 'topics' in data['lastVersion']['data']: # check for matches in the tags
                 for tag in data['lastVersion']['data']['topics']:
                     for language in tag['labelMap'].values():
                         if s in str(language).lower():
-                            subHit = True
-                            score += 1
-            if puzzle.comments != '':
+                            sub_score += 1
+            if search_comments and puzzle.comments != '':
                 for comment in json.loads(puzzle.comments):
                     if s in comment['content'].lower():
-                        subHit = True
-                        score += 1
-            if not subHit: hit = False
+                        sub_score += 1
+            if search_author and s in author.lower(): sub_score += 1
+            if sub_score == 0: hit = False
+            score += sub_score
         if hit:
             if 'statementHTML' in data['lastVersion']: # classic puzzle
                 statement = data['lastVersion']['statementHTML'] + '</div>'
@@ -50,7 +50,7 @@ def search(search_text, search_category):
                 'url': 'https://www.codingame.com/contribute/view/' + puzzle.handle,
                 'statement': statement,
                 'type': data['type'],
-                'author': data['nickname'] if 'nickname' in data else 'unknown',
+                'author': author,
                 'score': score
             })
     return result

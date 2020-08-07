@@ -26,11 +26,22 @@ def index(request):
     if 'q' in request.GET:
         search = request.GET['q']
         cat = request.GET.get('category', 'ANY')
-        data = puzzle_manager.search(search, cat)
+        title = 'title' in request.GET
+        statement = 'statement' in request.GET
+        tests = 'tests' in request.GET
+        comments = 'comments' in request.GET
+        tags = 'tags' in request.GET
+        author = 'author' in request.GET
+        data = puzzle_manager.search(search, cat, title, statement, tests, comments, tags, author)
         if len(data) > 1:
             data.sort(key=lambda x: -x['score'])
-        return render(request, 'puzzle_base.html', {'search':search, 'data':data, 'categories':categories})
-    return render(request, 'puzzle_base.html', {'search':None, 'categories':categories})
+        return render(request, 'puzzle_search.html', {'search':search, 'data':data, 'categories':categories,
+                                                      'title':title, 'statement':statement, 'tests':tests,
+                                                      'comments':comments, 'tags':tags, 'author':author})
+    return render(request, 'puzzle_search.html',
+            {'search':None, 'categories':categories, 'title':True, 'statement':True, 'tests':True,
+             'comments':True, 'tags':True, 'author':True}
+        )
 
 @csrf_exempt
 def update(request):

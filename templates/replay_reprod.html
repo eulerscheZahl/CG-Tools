@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+<form action="" method="get">
+    <label for="id">Replay ID: </label>
+    <input id="id" type="text" name="id">
+    <input type="submit" value="go">
+</form>
+
+{% if replay_id != None %}
+<iframe src="https://www.codingame.com/replay/{{replay_id}}" height="700" width="700"></iframe></br>
+<pre style="font-size:12">
+{% for player,acts in actions %}
+def player{{player}}():{% for a in acts %}
+    print('{{ a|split_line }}'){% endfor %}
+
+{% endfor %}
+</pre>
+{% endif %}
+
+{% endblock %}

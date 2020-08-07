@@ -1,21 +1,12 @@
-<html>
-<head>
-    <title>Codejam user search</title>
-    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css">
-    {% load static %}
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-</head>
-<body>
-    {% block content %}
-    {% include "header.html" %}
+{% extends 'base.html' %}
 
-    <form action="" method="post">
-        {% csrf_token %}
-        <label for="search">Search user: </label>
-        <input id="search" type="text" name="search">
-        <input type="submit" value="go">
-    </form>
+{% block content %}
+<form action="" method="post">
+    {% csrf_token %}
+    <label for="search">Search user: </label>
+    <input id="search" type="text" name="search">
+    <input type="submit" value="go">
+</form>
 
 <script>
     jQuery(function() {
@@ -54,7 +45,5 @@
     {% endfor %}
     {% endif %}
 
-    {% endblock %}
 </table>
-</body>
-</html>
+{% endblock %}

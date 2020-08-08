@@ -67,7 +67,7 @@ def detail(request, search):
 
     user = User.objects.filter(name=search).first()
     if user == None: return render(request, 'codejam_base.html', {'search':None})
-    data = RoundResult.objects.filter(user=user).order_by('round__order')
+    data = RoundResult.objects.filter(user=user).order_by('-round__order')
     return render(request, 'codejam_base.html', {'search':search, 'data':data})
 
 @transaction.atomic

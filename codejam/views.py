@@ -101,7 +101,7 @@ def update(request):
 @transaction.atomic
 def update2(request):
     dir = '/home/eulerschezahl/Documents/Programming/challenges/codejam/google_codejam_stats/client/public/round_data/'
-    for round in ['000000000019fef2.json', '000000000019fef4.json', '000000000019ffb9.json', '000000000019ff7e.json']:
+    for round in ['000000000019ff31.json']:
         info = dir + 'info/' + round
         scores = dir + 'scores/' + round
         with open(info, 'r') as f:

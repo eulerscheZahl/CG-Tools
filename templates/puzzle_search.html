@@ -58,7 +58,7 @@
         <h3><a href="#">{{ puzzle|get_item:'title' }}&nbsp;&nbsp;&nbsp;<sup><small>{{ puzzle|get_item:'type' }} by {{ puzzle|get_item:'author' }}</small></sup></a></h3>
         <div class="cg-statement">
             <a href={{ puzzle|get_item:'url' }}>view contribution on CodinGame</a> <br>
-            {{ puzzle|get_item:'statement'|clean_html|safe }}
+            {{ puzzle|get_item:'statement'|safe }}
         </div>
     {% endfor %}
     </div>

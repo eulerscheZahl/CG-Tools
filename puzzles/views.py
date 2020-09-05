@@ -11,17 +11,10 @@ from .models import *
 def get_item(dictionary, key):
     return dictionary.get(key)
 
-@register.filter
-def clean_html(html):
-    open = html.count('<div')
-    close = html.count('</div')
-    return '<div>' * max(0, close-open) + html + '</div>' * max(0, open-close)
-
 def index(request):
     categories = set(['ANY'])
     for puzzle in Puzzle.objects.all():
-        data = json.loads(puzzle.puzzle)['success']
-        categories.add(data['type'])
+        categories.add(puzzle.puzzleType)
     categories = sorted(list(categories))
     if 'q' in request.GET:
         search = request.GET['q']

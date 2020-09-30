@@ -38,9 +38,11 @@ class Puzzle(models.Model):
             self.testCases = ''
             for test in last_version['testCases']:
                 self.testCases += str(test['title']) + '\n' + str(test['testIn']) + '\n' + str(test['testOut']) + '\n'
+        self.topics = ''
         if 'topics' in last_version:
             for tag in last_version['topics']:
-                for language in tag['labelMap'].values(): self.topics += language + '\n'
+                for language in tag['labelMap'].keys():
+                    if language == '2': self.topics += tag['labelMap'][language] + '\n'
         if self.comments != '':
             for comment in json.loads(self.comments): self.commentText += comment['content'] + '\n'
 

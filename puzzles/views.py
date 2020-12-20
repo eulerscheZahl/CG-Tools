@@ -44,7 +44,7 @@ def stats(request):
         try:
             times[puzzle.puzzleType].append(json.loads(puzzle.puzzle)['success']['lastVersion']['autocloseTime'])
             data.append({'x':json.loads(puzzle.puzzle)['success']['lastVersion']['autocloseTime'], 'y':1})
-        except: print(puzzle.handle)
+        except: pass
 
     return render(request, 'puzzle_stats.html', {'data': data})
 

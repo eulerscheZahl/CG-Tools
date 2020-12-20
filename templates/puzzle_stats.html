@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<canvas id="chart"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+<script>
+    Date.prototype.addDays = function(days) {
+        var date = new Date(this.valueOf());
+        date.setDate(date.getDate() + days);
+        return date;
+    }
+
+    function newDate(days) {
+		return new Date().addDays(days);
+	}
+
+    var data = {{data|safe}}
+    var times = {}
+    for (var d in data) {
+        var date = new Date(data[d].x).addDays(-30);
+        date = new Date(date.toDateString())
+        if (times[date]) times[date]++
+        else times[date] = 1
+    }
+    var keys = Object.keys(times);
+    keys = keys.sort(function(a,b){return new Date(a) - new Date(b);})
+    keys.shift()
+    var first = new Date(keys[0])
+    var last = new Date(keys[keys.length-1])
+    for (var off = 1;; off++) {
+        var tmp = first.addDays(off)
+        if (tmp > last) break
+        if (!(tmp in keys)) keys.push(tmp)
+    }
+    keys = keys.sort(function(a,b){return new Date(a) - new Date(b);})
+
+    var vals = []
+    for (var k in keys) vals.push(times[keys[k]] || 0)
+
+  var config = {
+      type: 'bar',
+        data: {
+          labels: keys,
+          datasets: [{
+            backgroundColor: 'blue',
+            data: vals,
+          }]
+        },
+    options: {
+      responsive: true,
+      title: {
+             display: true,
+             text: 'Contributions per day'
+         }
+    }
+  };
+
+  window.onload = function() {
+    var ctx = document.getElementById('chart').getContext('2d');
+    window.myPie = new Chart(ctx, config);
+  };
+
+</script>
+
+{% endblock %}

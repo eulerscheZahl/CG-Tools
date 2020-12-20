@@ -36,6 +36,18 @@ def index(request):
              'comments':True, 'tags':True, 'author':True}
         )
 
+def stats(request):
+    times = {}
+    data = []
+    for puzzle in Puzzle.objects.all():
+        if not puzzle.puzzleType in times: times[puzzle.puzzleType] = []
+        try:
+            times[puzzle.puzzleType].append(json.loads(puzzle.puzzle)['success']['lastVersion']['autocloseTime'])
+            data.append({'x':json.loads(puzzle.puzzle)['success']['lastVersion']['autocloseTime'], 'y':1})
+        except: print(puzzle.handle)
+
+    return render(request, 'puzzle_stats.html', {'data': data})
+
 @csrf_exempt
 def update(request):
     handles = request.POST['handles']

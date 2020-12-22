@@ -20,6 +20,7 @@
     for (var d in data) {
         var date = new Date(data[d].x).addDays(-30);
         date = new Date(date.toDateString())
+        while (date.getDay() != 1) date = date.addDays(-1); // find previous Monday for less bars in chart
         if (times[date]) times[date]++
         else times[date] = 1
     }
@@ -28,20 +29,24 @@
     keys.shift()
     var first = new Date(keys[0])
     var last = new Date(keys[keys.length-1])
-    for (var off = 1;; off++) {
+    for (var off = 7;; off+=7) {
         var tmp = first.addDays(off)
         if (tmp > last) break
-        if (!(tmp in keys)) keys.push(tmp)
+        if (keys.indexOf(tmp.toString()) == -1) keys.push(tmp)
     }
     keys = keys.sort(function(a,b){return new Date(a) - new Date(b);})
 
+    var labels = []
     var vals = []
-    for (var k in keys) vals.push(times[keys[k]] || 0)
+    for (var k in keys) {
+        vals.push(times[keys[k]] || 0)
+        labels.push(new Date(keys[k]).toISOString().substring(0, 10))
+    }
 
   var config = {
       type: 'bar',
         data: {
-          labels: keys,
+          labels: labels,
           datasets: [{
             backgroundColor: 'blue',
             data: vals,
@@ -51,7 +56,7 @@
       responsive: true,
       title: {
              display: true,
-             text: 'Contributions per day'
+             text: 'Contributions per week'
          }
     }
   };

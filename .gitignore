@@ -4,3 +4,5 @@ venv
 
 update_puzzles.py
 update_puzzles_local.py
+command
+run.sh

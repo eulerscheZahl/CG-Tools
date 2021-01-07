@@ -10,14 +10,14 @@ class Puzzle(models.Model):
     inputDescription = models.TextField(default="")
     outputDescription = models.TextField(default="")
     constraints = models.TextField(default="")
-    title = models.TextField(default="")
-    author = models.TextField(default="")
+    title = models.TextField(default="", max_length=100, db_index=True)
+    author = models.TextField(default="", max_length=100, db_index=True)
     testCases = models.TextField(default="")
-    topics = models.TextField(default="")
+    topics = models.TextField(default="", max_length=200, db_index=True)
     statement = models.TextField(default="")
     statementHTML = models.TextField(default="")
     commentText = models.TextField(default="")
-    puzzleType = models.TextField(default="")
+    puzzleType = models.TextField(default="", max_length=40, db_index=True)
 
     def clean_html(self, html):
         open = html.count('<div')

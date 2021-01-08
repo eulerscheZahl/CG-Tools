@@ -29,10 +29,10 @@ def search(search_text, search_category, search_title, search_statement,
         if search_comments: field_search(query.filter(commentText__icontains=search), sub_scores, 1)
         if search_author: field_search(query.filter(author__icontains=search), sub_scores, 1)
 
-    for handle in sub_scores:
-        if handle not in handle_scores: continue
-        if sub_scores[handle] == 0: del handle_scores[handle]
-        else: handle_scores[handle] += sub_scores[handle]
+        for handle in sub_scores:
+            if handle not in handle_scores: continue
+            if sub_scores[handle] == 0: del handle_scores[handle]
+            else: handle_scores[handle] += sub_scores[handle]
 
     handles = list(handle_scores.keys())
     puzzles = Puzzle.objects.filter(handle__in=handles).values('handle', 'title', 'statementHTML', 'puzzleType', 'author')

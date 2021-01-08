@@ -29,21 +29,22 @@ def search(search_text, search_category, search_title, search_statement,
         if search_comments: field_search(query.filter(commentText__icontains=search), sub_scores, 1)
         if search_author: field_search(query.filter(author__icontains=search), sub_scores, 1)
 
-        for handle in sub_scores:
-            if handle not in handle_scores: continue
-            if sub_scores[handle] == 0: del handle_scores[handle]
-            else: handle_scores[handle] += sub_scores[handle]
+    for handle in sub_scores:
+        if handle not in handle_scores: continue
+        if sub_scores[handle] == 0: del handle_scores[handle]
+        else: handle_scores[handle] += sub_scores[handle]
 
-        for handle in handle_scores:
-            puzzle = Puzzle.objects.filter(handle=handle).first()
-            result.append({
-                'title': puzzle.title,
-                'url': 'https://www.codingame.com/contribute/view/' + puzzle.handle,
-                'statement': puzzle.statementHTML,
-                'type': puzzle.puzzleType,
-                'author': puzzle.author,
-                'score': handle_scores[handle]
-            })
+    handles = list(handle_scores.keys())
+    puzzles = Puzzle.objects.filter(handle__in=handles).values('handle', 'title', 'statementHTML', 'puzzleType', 'author')
+    for puzzle in puzzles:
+        result.append({
+            'title': puzzle['title'],
+            'url': 'https://www.codingame.com/contribute/view/' + puzzle['handle'],
+            'statement': puzzle['statementHTML'],
+            'type': puzzle['puzzleType'],
+            'author': puzzle['author'],
+            'score': handle_scores[puzzle['handle']]
+        })
     return result
 
 def update(handle):

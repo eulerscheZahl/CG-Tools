@@ -3,35 +3,46 @@ import requests
 
 from .models import Puzzle
 
+def field_search(puzzles, dict, score):
+    for puzzle in puzzles.values_list('handle', flat=True):
+        dict[puzzle] += score
+
 def search(search_text, search_category, search_title, search_statement,
            search_tests, search_comments, search_tags, search_author):
     result = []
-    for puzzle in Puzzle.objects.all():
-        if puzzle.puzzleType != search_category and search_category != 'ANY': continue
-        hit = True
-        score = 0
-        for s in search_text.lower().split():
-            sub_score = 0
-            if search_title and s in puzzle.title.lower(): sub_score += 10
-            if search_statement:
-                if s in puzzle.inputDescription.lower(): sub_score += 3
-                if s in puzzle.outputDescription.lower(): sub_score += 2
-                if s in puzzle.constraints.lower(): sub_score += 2
-                if s in puzzle.statement.lower(): sub_score += 1
-            if search_tests and s in puzzle.testCases.lower(): sub_score += 1
-            if search_tags and s in puzzle.topics.lower(): sub_score += 1
-            if search_comments and s in puzzle.commentText: sub_score += 1
-            if search_author and s in puzzle.author.lower(): sub_score += 1
-            if sub_score == 0: hit = False
-            score += sub_score
-        if hit:
+    handles = list(Puzzle.objects.all().values_list('handle', flat=True))
+    handle_scores = dict.fromkeys(handles, 0)
+
+    for search in search_text.split():
+        sub_scores = dict.fromkeys(handles, 0)
+        query = Puzzle.objects.all()
+        if search_category != 'ANY': query = Puzzle.objects.filter(puzzleType=search_category)
+
+        if search_title: field_search(query.filter(title__icontains=search), sub_scores, 10)
+        if search_statement:
+            field_search(query.filter(inputDescription__icontains=search), sub_scores, 3)
+            field_search(query.filter(outputDescription__icontains=search), sub_scores, 2)
+            field_search(query.filter(constraints__icontains=search), sub_scores, 2)
+            field_search(query.filter(statement__icontains=search), sub_scores, 1)
+        if search_tests: field_search(query.filter(testCases__icontains=search), sub_scores, 1)
+        if search_tags: field_search(query.filter(topics__icontains=search), sub_scores, 1)
+        if search_comments: field_search(query.filter(commentText__icontains=search), sub_scores, 1)
+        if search_author: field_search(query.filter(author__icontains=search), sub_scores, 1)
+
+        for handle in sub_scores:
+            if handle not in handle_scores: continue
+            if sub_scores[handle] == 0: del handle_scores[handle]
+            else: handle_scores[handle] += sub_scores[handle]
+
+        for handle in handle_scores:
+            puzzle = Puzzle.objects.filter(handle=handle).first()
             result.append({
                 'title': puzzle.title,
                 'url': 'https://www.codingame.com/contribute/view/' + puzzle.handle,
                 'statement': puzzle.statementHTML,
                 'type': puzzle.puzzleType,
                 'author': puzzle.author,
-                'score': score
+                'score': handle_scores[handle]
             })
     return result
 

@@ -12,10 +12,10 @@ def get_item(dictionary, key):
     return dictionary.get(key)
 
 def index(request):
-    categories = set(['ANY'])
-    for puzzle in Puzzle.objects.all():
-        categories.add(puzzle.puzzleType)
-    categories = sorted(list(categories))
+    categories = Puzzle.objects.all().values_list("puzzleType", flat=True).distinct()
+    categories = list(categories)
+    categories.append("ANY")
+    categories.sort()
     if 'q' in request.GET:
         search = request.GET['q']
         cat = request.GET.get('category', 'ANY')

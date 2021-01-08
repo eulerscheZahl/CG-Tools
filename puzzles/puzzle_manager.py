@@ -9,14 +9,14 @@ def field_search(puzzles, dict, score):
 
 def search(search_text, search_category, search_title, search_statement,
            search_tests, search_comments, search_tags, search_author):
+    query = Puzzle.objects.all()
+    if search_category != 'ANY': query = Puzzle.objects.filter(puzzleType=search_category)
     result = []
-    handles = list(Puzzle.objects.all().values_list('handle', flat=True))
+    handles = list(query.values_list('handle', flat=True))
     handle_scores = dict.fromkeys(handles, 0)
 
     for search in search_text.split():
         sub_scores = dict.fromkeys(handles, 0)
-        query = Puzzle.objects.all()
-        if search_category != 'ANY': query = Puzzle.objects.filter(puzzleType=search_category)
 
         if search_title: field_search(query.filter(title__icontains=search), sub_scores, 10)
         if search_statement:

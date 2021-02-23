@@ -58,12 +58,12 @@ def update(handle):
         comments = []
         url = 'https://www.codingame.com/services/CommentRemoteService/getFirstLevelComments'
         url2 = 'https://www.codingame.com/services/CommentRemoteService/getSecondLevelComments'
-        r = requests.post(url, json=[None,json.loads(puzzle.puzzle)['success']['commentableId']])
-        for comment in r.json()['success']:
+        r = requests.post(url, json=[None,json.loads(puzzle.puzzle)['commentableId']])
+        for comment in r.json():
             comments.append(comment)
             if not 'parentCommentId' in comment and comment['responseCount'] > 1:
                 r = requests.post(url2, json=[None,comment['commentId']])
-                for comment2 in r.json()['success']:
+                for comment2 in r.json():
                     comments.append(comment2)
         commentsUnique = []
         for c in comments:

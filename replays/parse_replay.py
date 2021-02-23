@@ -18,22 +18,22 @@ def get_data(id):
 
 def load_replay(id):
     data = get_data(id)
-    game = data['success']['frames'][0]['view']
-    if 'Roche' in game: return code4life.parse(data['success'])
-    if 'TheGreatEscape' in game: return the_great_escape.parse(data['success'])
+    game = data['frames'][0]['view']
+    if 'Roche' in game: return code4life.parse(data)
+    if 'TheGreatEscape' in game: return the_great_escape.parse(data)
 
     # new framework doesn't give the name, try to detect it by filenames instead
     # not happy about that solution :(
     s = json.dumps(data)
     if 'circle.png' in s and 'cross.png' in s:
-        return tic_tac_toe.parse(data['success'])
+        return tic_tac_toe.parse(data)
     raise Exception(s)
 
 def reproduce_replay(id):
     data = get_data(id)
-    game = data['success']['frames'][0]['view']
+    game = data['frames'][0]['view']
     actions = {}
-    for frame in data['success']['frames']:
+    for frame in data['frames']:
         if 'agentId' not in frame or 'stdout' not in frame: continue
         agent = frame['agentId']
         stdout = frame['stdout'].replace('\\n', '')

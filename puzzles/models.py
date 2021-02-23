@@ -25,7 +25,7 @@ class Puzzle(models.Model):
         return '<div>' * max(0, close-open) + html + '</div>' * max(0, open-close)
 
     def extract_fields(self):
-        data = json.loads(self.puzzle)['success']
+        data = json.loads(self.puzzle)
         last_version = data['lastVersion']['data']
 
         self.author = data['nickname'] if 'nickname' in data else 'unknown'

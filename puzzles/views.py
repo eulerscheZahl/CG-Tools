@@ -42,8 +42,8 @@ def stats(request):
     for puzzle in Puzzle.objects.all():
         if not puzzle.puzzleType in times: times[puzzle.puzzleType] = []
         try:
-            times[puzzle.puzzleType].append(json.loads(puzzle.puzzle)['success']['lastVersion']['autocloseTime'])
-            data.append({'x':json.loads(puzzle.puzzle)['success']['lastVersion']['autocloseTime'], 'y':1})
+            times[puzzle.puzzleType].append(json.loads(puzzle.puzzle)['lastVersion']['autocloseTime'])
+            data.append({'x':json.loads(puzzle.puzzle)['lastVersion']['autocloseTime'], 'y':1})
         except: pass
 
     return render(request, 'puzzle_stats.html', {'data': data})

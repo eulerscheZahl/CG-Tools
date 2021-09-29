@@ -1,6 +1,7 @@
 venv
 *.pyc
 .env
+matches
 
 update_puzzles.py
 update_puzzles_local.py

@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Select a leaderboard</h1>
+{% for game in games %}
+<a href="?game={{game}}">{{game|title}}</a>
+{% endfor %}
+
+<br><br>
+{% if game != None %}
+{{game|title}} <br>
+<table>
+    <thead>
+        <tr>
+            <td>Rank</td>
+            <td>User</td>
+            <td>Score</td>
+            <td>Language</td>
+            <td>Last submit</td>
+            <td>Replay</td>
+            <td>Matches</td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td>{{user|get_item:'rank'}}</td>
+            <td>
+                <img class="avatar"
+                    src="https://static-aznet.codingame.com/servlet/fileservlet?id={{user|get_item:'codingamer'|get_item:'avatar'}}&format=navigation_avatar" />
+                <a href="https://www.codingame.com/profile/{{user|get_item:'codingamer'|get_item:'publicHandle'}}">{{user|get_item:'pseudo'}}</a>
+            </td>
+            <td>{{user|get_item:'score'}}</td>
+            <td>{{user|get_item:'programmingLanguage'}}</td>
+            <td>{{user|get_item:'creationTime'|get_time}}</td>
+            <td>
+                {% if botReplays|get_replay:user == None %}
+                No replay yet
+                {% else %}
+                <a href="https://www.codingame.com/replay/{{ botReplays|get_replay:user }}">replay</a>
+                {% endif %}
+            </td>
+            <td>{% for partner_id in replayGroups|get_matches:user %}
+                {% with partner=users|get_user:partner_id %}
+                {% if partner != None %}
+                <a
+                    href="https://www.codingame.com/replay/{{ botReplays|get_replay_by_id:partner_id }}">{{partner|get_item:'pseudo'}}</a>
+                {% endif %}
+                {% endwith %}
+                {% endfor %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    {% endif %}
+    {% endblock %}

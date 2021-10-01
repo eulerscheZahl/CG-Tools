@@ -79,7 +79,7 @@
             {% for g in user_matches %}
                 {% for bot in user_matches|get_item:g %}
                     <tr>
-                        <td>{{g}}</td>
+                        <td><a href="?game={{g}}">{{g}}</a></td>
                         <td>
                             <a href="https://www.codingame.com/replay/{{ bot|get_item:'bot' }}">replay</a>
                         </td>

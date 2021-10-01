@@ -93,7 +93,6 @@ def index(request):
                             bots_matches['partners'][user_of_bot[gr]
                                                      ] = botReplays[str(gr)]
                 user_matches[g].append(bots_matches)
-        print(user_matches)
 
     games = sorted(Leaderboard.objects.all().values_list("game", flat=True))
     games.remove('bots_per_user')

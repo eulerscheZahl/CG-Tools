@@ -18,6 +18,10 @@
             font-size: 1.5rem;
         }
 
+        p {
+            font-size: medium;
+        }
+
         .header a {
             color: white;
             background-color: #b50e25;
@@ -81,6 +85,7 @@
         <a href="{% url 'analyze' %}">Replay json</a>
         <a href="{% url 'reprod' %}">Replay reproduce</a>
         <a href="{% url 'puzzle_index' %}">Puzzle search</a>
+        <a href="{% url 'leaderboards_index' %}">Leaderboards</a>
     </div>
     {% block content %}
     {% endblock %}

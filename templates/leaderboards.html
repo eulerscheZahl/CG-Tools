@@ -1,24 +1,33 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1>Select a leaderboard</h1>
-{% for game in games %}
-<a href="?game={{game}}">{{game|title}}</a>
-{% endfor %}
+<p>Identical replays don't necessarily mean an identical bot.
+    At the same time different replays can still have the same underlying bot code.
+    Watch the replays and draw your own conclusions.</p>
 
-<br><br>
+<form method="GET">
+    <label for="game">Select a leaderboard: </label>
+    <select id="game" name="game">
+        {% for game in games %}
+            <option value="{{game}}" {% if request.GET.game == game %}selected{% endif %}>{{game}}</option>
+        {% endfor %}
+    </select>
+    <input type="submit" value="go">
+</form>
+
+<br>
 {% if game != None %}
 {{game|title}} <br>
 <table>
     <thead>
         <tr>
-            <td>Rank</td>
-            <td>User</td>
-            <td>Score</td>
-            <td>Language</td>
-            <td>Last submit</td>
-            <td>Replay</td>
-            <td>Matches</td>
+            <th>Rank</th>
+            <th>User</th>
+            <th>Score</th>
+            <th>Language</th>
+            <th>Last submit</th>
+            <th>Replay</th>
+            <th>Matches</th>
         </tr>
     </thead>
     <tbody>
@@ -28,7 +37,8 @@
             <td>
                 <img class="avatar"
                     src="https://static-aznet.codingame.com/servlet/fileservlet?id={{user|get_item:'codingamer'|get_item:'avatar'}}&format=navigation_avatar" />
-                <a href="https://www.codingame.com/profile/{{user|get_item:'codingamer'|get_item:'publicHandle'}}">{{user|get_item:'pseudo'}}</a>
+                <a
+                    href="?user={{user|get_item:'codingamer'|get_item:'userId'}}">{{user|get_item:'pseudo'}}</a>
             </td>
             <td>{{user|get_item:'score'}}</td>
             <td>{{user|get_item:'programmingLanguage'}}</td>
@@ -52,5 +62,37 @@
         </tr>
         {% endfor %}
     </tbody>
-    {% endif %}
-    {% endblock %}
+</table>
+{% endif %}
+
+{% if user != None %}
+    {{bots|get_item:'username'}} <br>
+    <table>
+        <thead>
+            <tr>
+                <th>Game</th>
+                <th>Replay</th>
+                <th>Matches</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for g in user_matches %}
+                {% for bot in user_matches|get_item:g %}
+                    <tr>
+                        <td>{{g}}</td>
+                        <td>
+                            <a href="https://www.codingame.com/replay/{{ bot|get_item:'bot' }}">replay</a>
+                        </td>
+                        <td>  
+                            {% for p in bot|get_item:'partners' %}
+                            <a href="https://www.codingame.com/replay/{{bot|get_item:'partners'|get_item:p}}">{{p}}</a>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+
+{% endblock %}

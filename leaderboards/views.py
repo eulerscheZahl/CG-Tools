@@ -62,7 +62,7 @@ def index(request):
         botReplays = json.loads(leaderboard.botReplays)
         url = 'https://www.codingame.com/services/Leaderboards/getFilteredPuzzleLeaderboard'
         data = [game, None, "global", {
-            "active": True, "column": "LEAGUE", "filter": "legend"}]
+            "active": False, "column": "", "filter": ""}]
         r = requests.post(url, json=data).json()
         users = r['users']
         users = users[:100]

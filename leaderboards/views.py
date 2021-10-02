@@ -77,7 +77,8 @@ def index(request):
                 for bot_id in all_bots[bot]['bots'][g]:
                     user_of_bot[bot_id] = all_bots[bot]['username']
 
-        bots = all_bots[user]
+        bots = all_bots[user] if user in all_bots else {
+            'username': user, 'bots': {}}
         for g in bots['bots']:
             user_matches[g] = []
             leaderboard = Leaderboard.objects.filter(game=g).first()

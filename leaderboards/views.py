@@ -110,4 +110,4 @@ def update(request):
     botReplays = request.POST['botReplays']
     replayGroups = request.POST['replayGroups']
     Leaderboard.updateEntry(game, botReplays, replayGroups)
-    return HttpResponse('updated successfully')
+    return HttpResponse('updated ' + game + ' successfully')
